@@ -4,7 +4,11 @@ import * as Yup from "yup";
 import FormikControl from "./formik/FormikControl";
 import { viewPng, noViewPng } from "../assets";
 import { Image } from "../common";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
 function AuthenticationForm() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const initialValues = {
     email: "",
@@ -19,6 +23,18 @@ function AuthenticationForm() {
   const onSubmit = (values, onSubmitProps) => {
     console.log("Form data", values);
     onSubmitProps.resetForm();
+    signInWithEmailAndPassword(auth, values.email, values.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        navigate("/home");
+     
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log({ errorCode, errorMessage });
+      });
   };
 
   return (

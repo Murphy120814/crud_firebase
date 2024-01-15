@@ -1,15 +1,66 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { selectDarkMode } from "../../slices/themeSlice.js";
-import { navArray } from "../../../constants.js";
+
 import { NavLink } from "react-router-dom";
-import { Image } from "../../common";
+import { Button, Image } from "../../common";
+import { REACT_APP_ADMIN_UID } from "../../../constants.js";
 import NavLinkContainer from "./NavLinkContainer";
 import { logoPng } from "../../assets/index.js";
 import ThemeToggle from "./ThemeToggle.jsx";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../../firebase.js";
+import {
+  updateAdminUID,
+  getAdminUID,
+  removeAdminUID,
+} from "../../slices/adminSlice.js";
+import {
+  updateUserUID,
+  getUserUID,
+  removeUserUID,
+} from "../../slices/userSlice.js";
 function Navbar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const adminUID = useSelector(getAdminUID);
+  const userUID = useSelector(getUserUID);
   const darkMode = useSelector(selectDarkMode);
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.'
+        console.log("user Have been signed out");
+        dispatch(removeUserUID());
+        dispatch(removeAdminUID());
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
 
+        navigate("/home");
+        console.log(user);
+        if (user.uid == REACT_APP_ADMIN_UID) {
+          dispatch(updateAdminUID(user.uid));
+        } else {
+          dispatch(updateUserUID(user.uid));
+        }
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        navigate("/");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
   useEffect(() => {
     // window.localStorage.setItem("darkMode", darkMode);
     if (window.localStorage.getItem("darkMode") === "true") {
@@ -25,10 +76,15 @@ function Navbar() {
         <Image src={logoPng} className="h-[50px] w-[50px]" />
       </NavLink>
       <div className="flex items-center gap-6 ">
-        {" "}
-        {navArray.map((tabName, index) => (
-          <NavLinkContainer key={index} tabName={tabName} />
-        ))}
+        {adminUID || userUID ? <NavLinkContainer tabName="home" /> : null}
+        {adminUID && <NavLinkContainer tabName="adminPanel" />}
+        {adminUID || userUID ? (
+          <Button
+            className="hover:text-primary-color hover:font-bold transition-all ease-in-out"
+            onClick={handleSignOut}>
+            SignOut
+          </Button>
+        ) : null}
         <ThemeToggle />
       </div>
     </div>
