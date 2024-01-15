@@ -8,6 +8,11 @@ function ThemeToggle() {
 
   const dispatch = useDispatch();
   const handleToggleDarkMode = () => {
+    if (darkMode) {
+      window.localStorage.removeItem("darkMode");
+    } else {
+      window.localStorage.setItem("darkMode", true);
+    }
     dispatch(toggleDarkMode());
   };
   return (

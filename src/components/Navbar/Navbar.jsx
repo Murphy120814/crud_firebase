@@ -9,8 +9,10 @@ import { logoPng } from "../../assets/index.js";
 import ThemeToggle from "./ThemeToggle.jsx";
 function Navbar() {
   const darkMode = useSelector(selectDarkMode);
+
   useEffect(() => {
-    if (darkMode) {
+    // window.localStorage.setItem("darkMode", darkMode);
+    if (window.localStorage.getItem("darkMode") === "true") {
       document.body.classList.add("dark");
     } else {
       document.body.classList.remove("dark");
@@ -18,7 +20,10 @@ function Navbar() {
   }, [darkMode]);
   return (
     <div className="flex w-full items-center  justify-between px-4 py-2">
-     <NavLink to="/"> <Image src={logoPng} className="h-[50px] w-[50px]" /></NavLink>
+      <NavLink to="/">
+        {" "}
+        <Image src={logoPng} className="h-[50px] w-[50px]" />
+      </NavLink>
       <div className="flex items-center gap-6 ">
         {" "}
         {navArray.map((tabName, index) => (
