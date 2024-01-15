@@ -1,6 +1,15 @@
 import React from "react";
+import { Provider } from "react-redux";
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import { NotFound, Authentication, Home, Navbar, Footer } from "./components";
+import {
+  NotFound,
+  Authentication,
+  Home,
+  Navbar,
+  Footer,
+  Permission,
+} from "./components";
+import store from "./store/store";
 export const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -15,6 +24,10 @@ export const appRouter = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "/permission",
+        element: <Permission />,
+      },
+      {
         path: "/*",
         element: <NotFound />,
       },
@@ -25,10 +38,15 @@ export const appRouter = createBrowserRouter([
 
 function App() {
   return (
-    <div className="">
-      <Navbar />
-      <Outlet />
-      <Footer />
+    <div className="flex min-h-screen w-full flex-col items-center justify-between bg-white text-black dark:bg-black dark:text-white">
+      <Provider store={store}>
+        <Navbar />
+        <div className="min-h-[80vh]">
+          {" "}
+          <Outlet />
+        </div>
+        <Footer />
+      </Provider>
     </div>
   );
 }
