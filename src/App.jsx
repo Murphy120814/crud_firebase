@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { toggleDarkMode } from "./slices/themeSlice";
 import { Provider } from "react-redux";
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import { UserFormikForm } from "./components";
 import {
   NotFound,
   Authentication,
@@ -28,6 +29,9 @@ export const appRouter = createBrowserRouter([
         path: "/permission",
         element: <Permission />,
       },
+      {
+        path: "/addUser",
+        element: <UserFormikForm />,},
       {
         path: "/*",
         element: <NotFound />,
