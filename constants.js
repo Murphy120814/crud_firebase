@@ -12,3 +12,59 @@ export const options = [
   { key: "Female", value: "female" },
   { key: "Other", value: "other" },
 ];
+
+export const payLoadCreator = (
+  name,
+  email,
+  dateOfBirth,
+  contactNumber,
+  workProfile,
+  sex,
+  canUpdate,
+  canDelete,
+  isAdmin,
+  editedAt
+) => ({
+  name,
+  email,
+  dateOfBirth,
+  contactNumber,
+  workProfile,
+  sex,
+  canUpdate,
+  canDelete,
+  isAdmin,
+  editedAt,
+});
+
+export function formatTimestamp(timestamp) {
+  if (!timestamp) {
+    return null;
+  }
+  // Convert to milliseconds
+  const milliseconds =
+    timestamp?.seconds * 1000 + timestamp?.nanoseconds / 1000000;
+
+  // Create a Date object
+  const date = new Date(milliseconds);
+
+  // Format the date
+  // Example: 'Monday, January 17, 2019, 8:08 PM'
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return (
+    date.toLocaleDateString("en-US", options) +
+    ", " +
+    date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })
+  );
+}

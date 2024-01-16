@@ -20,6 +20,7 @@ import {
   updateUserUID,
   getUserUID,
   removeUserUID,
+  clearUserList,
 } from "../../slices/userSlice.js";
 function Navbar() {
   const dispatch = useDispatch();
@@ -34,6 +35,9 @@ function Navbar() {
         console.log("user Have been signed out");
         dispatch(removeUserUID());
         dispatch(removeAdminUID());
+        dispatch(clearUserList());
+        window.localStorage.removeItem("adminUID");
+        window.localStorage.removeItem("userUID");
       })
       .catch((error) => {
         // An error happened.
@@ -44,14 +48,14 @@ function Navbar() {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-
-        navigate("/home");
-        console.log(user);
-        if (user.uid == REACT_APP_ADMIN_UID) {
-          dispatch(updateAdminUID(user.uid));
-        } else {
-          dispatch(updateUserUID(user.uid));
+        if (window.localStorage.getItem("adminUID")) {
+          dispatch(updateAdminUID(window.localStorage.getItem("adminUID")));
         }
+        if (window.localStorage.getItem("userUID")) {
+          dispatch(updateUserUID(window.localStorage.getItem("userUID")));
+        }
+        navigate("/home");
+
         // ...
       } else {
         // User is signed out
@@ -60,7 +64,7 @@ function Navbar() {
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [adminUID]);
   useEffect(() => {
     // window.localStorage.setItem("darkMode", darkMode);
     if (window.localStorage.getItem("darkMode") === "true") {

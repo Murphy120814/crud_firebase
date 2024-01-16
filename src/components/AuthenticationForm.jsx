@@ -7,7 +7,13 @@ import { Image } from "../common";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { updateAdminUID } from "../slices/adminSlice";
+import { updateUserUID } from "../slices/userSlice";
+import { REACT_APP_ADMIN_UID } from "../../constants";
 function AuthenticationForm() {
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const initialValues = {
@@ -26,9 +32,19 @@ function AuthenticationForm() {
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
+        const { uid } = userCredential.user;
+
+        if (uid == REACT_APP_ADMIN_UID) {
+          console.log("in Admin");
+          dispatch(updateAdminUID(uid));
+          window.localStorage.setItem("adminUID", uid);
+        } else {
+          console.log("in User");
+          dispatch(updateUserUID(uid));
+          window.localStorage.setItem("userUID", uid);
+        }
+
         navigate("/home");
-     
       })
       .catch((error) => {
         const errorCode = error.code;

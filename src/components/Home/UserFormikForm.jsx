@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import FormikControl from "../formik/FormikControl";
 import { Formik, Form } from "formik";
+import { auth, db } from "../../../firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import * as Yup from "yup";
 import { viewPng, noViewPng } from "../../assets";
 import { Button, Image } from "../../common";
@@ -23,6 +26,45 @@ function UserFormikForm() {
     workProfile: Yup.string().required("Work Profile is required"),
     sex: Yup.string().required("Gender is required"),
   });
+
+  const handleAddUsersData = async function (
+    name,
+    email,
+    password,
+    dateOfBirth,
+    contactNumber,
+    workProfile,
+    sex,
+    canUpdate,
+    canDelete,
+    isAdmin,
+    editedAt
+  ) {
+    try {
+      const userRes = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(userRes);
+      await setDoc(doc(db, "users", userRes.user.uid), {
+        name,
+        email,
+        dateOfBirth,
+        contactNumber,
+        workProfile,
+        sex,
+        canUpdate,
+        canDelete,
+        isAdmin,
+        editedAt,
+        createdAt: serverTimestamp(),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleNumericChange = (e, formikChange) => {
     const { value } = e.target;
     if (value === "" || /^[0-9\b]+$/.test(value)) {
@@ -40,9 +82,30 @@ function UserFormikForm() {
   };
   const onSubmit = (values, onSubmitProps) => {
     console.log("Form data", values);
+    const {
+      name,
+      email,
+      password,
+      dateOfBirth,
+      contactNumber,
+      workProfile,
+      sex,
+    } = values;
     onSubmitProps.resetForm();
+    handleAddUsersData(
+      name,
+      email,
+      password,
+      dateOfBirth,
+      contactNumber,
+      workProfile,
+      sex,
+      false,
+      false,
+      false,
+      null
+    );
     navigate("/home");
-    console.log("hii");
   };
   return (
     <div className="flex  h-full min-h-[80vh] w-full items-start justify-center py-12">
@@ -71,7 +134,7 @@ function UserFormikForm() {
               />
             </div>
             <div className="relative sm:col-span-2 ">
-              <div className="absolute  right-0 top-[39px] flex cursor-pointer items-center pr-4">
+              <div className="absolute right-0 top-[39px] flex cursor-pointer items-center pr-4">
                 <Image
                   src={!showPassword ? viewPng : noViewPng}
                   className="h-5 w-5"
