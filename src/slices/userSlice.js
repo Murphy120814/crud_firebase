@@ -6,6 +6,7 @@ export const addUsersFromFirebaseToStore = createAsyncThunk(
   "user/addUsersFromFirebaseToStore",
   async () => {
     const usersList = [];
+
     const querySnapshot = await getDocs(collection(db, "users"));
     querySnapshot.forEach((doc) => {
       usersList.push({
@@ -35,8 +36,8 @@ const userSlice = createSlice({
       state.userUID = action.payload;
     },
 
-    addUserAuthInfo:(state,action) => {
-      state.userAuthInfo.push(action.payload)
+    addUserAuthInfo: (state, action) => {
+      state.userAuthInfo.push(action.payload);
     },
     clearUserList: (state, action) => {
       state.userList.length = 0;
