@@ -3,14 +3,25 @@ import FormikControl from "../formik/FormikControl";
 import { Formik, Form } from "formik";
 import { auth, db } from "../../../firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateEmail,
+  updatePassword,
+} from "firebase/auth";
 import * as Yup from "yup";
 import { viewPng, noViewPng } from "../../assets";
 import { Button, Image } from "../../common";
+import { getAdminUID } from "../../slices/adminSlice";
+import { getUserUID } from "../../slices/userSlice";
+import { useSelector } from "react-redux";
 import { options } from "../../../constants";
-import { useNavigate } from "react-router-dom";
-function UserFormikForm({ savedValues }) {
+import { useNavigate, useParams } from "react-router-dom";
+
+function UserFormikForm({ savedValues, uid }) {
   const navigate = useNavigate();
+  const { uid: userId } = useParams();
+  const adminUID = useSelector(getAdminUID);
+  const userUID = useSelector(getUserUID);
   const [showPassword, setShowPassword] = useState(false);
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
@@ -37,17 +48,19 @@ function UserFormikForm({ savedValues }) {
     sex,
     canUpdate,
     canDelete,
+    canView,
     isAdmin,
     editedAt
   ) {
     try {
-      const userRes = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log(userRes);
-      await setDoc(doc(db, "users", userRes.user.uid), {
+      let userRes;
+      if (!savedValues) {
+        userRes = await createUserWithEmailAndPassword(auth, email, password);
+        console.log(userRes);
+      }
+      const currentUserId = savedValues ? uid : userRes.user.uid;
+      console.log(currentUserId);
+      await setDoc(doc(db, "users", currentUserId), {
         name,
         email,
         dateOfBirth,
@@ -56,14 +69,24 @@ function UserFormikForm({ savedValues }) {
         sex,
         canUpdate,
         canDelete,
+        canView,
         isAdmin,
-        editedAt,
-        createdAt: serverTimestamp(),
+        editedAt: savedValues ? serverTimestamp() : editedAt,
+        createdAt: savedValues ? savedValues.rawCreationAt : serverTimestamp(),
       });
     } catch (error) {
       console.log(error);
     }
   };
+
+  let disabledStatus = true;
+
+  if (adminUID && savedValues) {
+    disabledStatus = true;
+  }
+  if ((userUID == userId && savedValues) || adminUID) {
+    disabledStatus = false;
+  }
 
   const handleNumericChange = (e, formikChange) => {
     const { value } = e.target;
@@ -82,6 +105,29 @@ function UserFormikForm({ savedValues }) {
   };
   const onSubmit = (values, onSubmitProps) => {
     console.log("Form data", values);
+    if (savedValues?.email != values.email) {
+      updateEmail(auth.currentUser, values.email)
+        .then(() => {
+          // Email updated!
+          // ...
+          console.log("email Updated");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    if (values.password != "User@12") {
+      updatePassword(auth.currentUser, values.password)
+        .then(() => {
+          // Update successful.
+          console.log("password Updated");
+        })
+        .catch((error) => {
+          // An error ocurred
+          // ...
+          console.log(error);
+        });
+    }
     const {
       name,
       email,
@@ -100,6 +146,7 @@ function UserFormikForm({ savedValues }) {
       contactNumber,
       workProfile,
       sex,
+      false,
       false,
       false,
       false,
@@ -129,6 +176,7 @@ function UserFormikForm({ savedValues }) {
                 control="input"
                 label="Email"
                 type="text"
+                disabled={disabledStatus}
                 name="email"
                 placeholder="prathm@frontendmeta.dev"
               />
@@ -147,6 +195,7 @@ function UserFormikForm({ savedValues }) {
                 label={savedValues ? "Update Password" : "New Password"}
                 type={showPassword ? "text" : "password"}
                 name="password"
+                disabled={disabledStatus}
                 placeholder="********"
               />
             </div>

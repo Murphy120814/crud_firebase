@@ -3,6 +3,8 @@ import { Button } from "../../common";
 import { useSelector, useDispatch } from "react-redux";
 import { getAdminUID } from "../../slices/adminSlice";
 import { Link } from "react-router-dom";
+import { emptyPng } from "../../assets";
+import Shimmer from "../Utils/Shimmer";
 import {
   addUsersFromFirebaseToStore,
   getUserList,
@@ -24,7 +26,11 @@ function Home() {
   }, []);
 
   if (status === "loading") {
-    return <div>Loading</div>;
+    return (
+      <div className="flex flex-col gap-4 p-8">
+        <Shimmer />
+      </div>
+    );
   }
   if (status === "failed") {
     return <div>{error}</div>;
@@ -51,7 +57,14 @@ function Home() {
         </Link>
       )}
 
-      <div className="w-full">{renderedUserList}</div>
+      {renderedUserList?.length == 0 ? (
+        <div className="flex h-[30vh] w-2/12 flex-col gap-3">
+          <img src={emptyPng} alt="emptyDog" className="h-full w-full" />
+          <h1 className="text-center text-2xl font-bold">No one is here!!!</h1>
+        </div>
+      ) : (
+        <div className="w-full">{renderedUserList}</div>
+      )}
     </div>
   );
 }

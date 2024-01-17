@@ -11,8 +11,10 @@ export const addUsersFromFirebaseToStore = createAsyncThunk(
       usersList.push({
         id: doc.id,
         ...doc.data(),
+        rawCreationAt: doc.data().createdAt,
         createdAt: formatTimestamp(doc.data().createdAt),
         dateOfBirth: formatTimestamp(doc.data().dateOfBirth),
+        editedAt: doc.data().editedAt && formatTimestamp(doc.data().editedAt),
       });
     });
     return usersList;
@@ -23,12 +25,18 @@ const userSlice = createSlice({
   initialState: {
     userUID: null,
     userList: [],
+    userAuthInfo: [],
+    createdAt: null,
     status: "idle", // idle, loading, succeeded, failed
     error: "",
   },
   reducers: {
     updateUserUID: (state, action) => {
       state.userUID = action.payload;
+    },
+
+    addUserAuthInfo:(state,action) => {
+      state.userAuthInfo.push(action.payload)
     },
     clearUserList: (state, action) => {
       state.userList.length = 0;
@@ -57,6 +65,6 @@ export const getUserUID = (state) => state.user.userUID;
 export const getStatus = (state) => state.user.status;
 export const getUserList = (state) => state.user.userList;
 export const getError = (state) => state.user.error;
-export const { updateUserUID, removeUserUID, clearUserList } =
+export const { updateUserUID, removeUserUID, clearUserList, addUserAuthInfo } =
   userSlice.actions;
 export default userSlice.reducer;

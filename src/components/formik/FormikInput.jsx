@@ -15,7 +15,7 @@ function FormikInput(props) {
         id={name}
         name={name}
         {...rest}
-        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
+        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 disabled:cursor-not-allowed dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
       />
       <ErrorMessage name={name} component={FormikError} />
     </>

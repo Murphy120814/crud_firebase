@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "./formik/FormikControl";
@@ -14,12 +14,18 @@ import { REACT_APP_ADMIN_UID } from "../../constants";
 function AuthenticationForm() {
   const dispatch = useDispatch();
 
+  const [showErrorMessage, setShowErrorMessage] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const initialValues = {
     email: "",
     password: "",
   };
+  useEffect(() => {
+    setTimeout(() => {
+      setShowErrorMessage("");
+    }, [1000]);
+  }, [showErrorMessage]);
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
@@ -49,6 +55,7 @@ function AuthenticationForm() {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        setShowErrorMessage(errorCode);
         console.log({ errorCode, errorMessage });
       });
   };
@@ -93,6 +100,10 @@ function AuthenticationForm() {
             className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800  disabled:bg-black disabled:opacity-20 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto">
             Log In
           </button>
+          <span className="font-semibold text-red-600">
+            {" "}
+            {showErrorMessage}
+          </span>
         </Form>
       )}
     </Formik>

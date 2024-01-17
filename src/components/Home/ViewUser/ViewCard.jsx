@@ -8,6 +8,9 @@ function ViewCard(props) {
   if (typeof value === "boolean") {
     value = value.toString();
   }
+  if (typeof value === "object") {
+    value = "-";
+  }
   return (
     <div className="mb-2  mt-8 flex items-center justify-start gap-4 ">
       <label className="flex w-4/12 font-bold text-black" htmlFor={field}>

@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectDarkMode } from "../../slices/themeSlice.js";
 
-import { NavLink } from "react-router-dom";
 import { Button, Image } from "../../common";
-import { REACT_APP_ADMIN_UID } from "../../../constants.js";
+
 import NavLinkContainer from "./NavLinkContainer";
 import { logoPng } from "../../assets/index.js";
 import ThemeToggle from "./ThemeToggle.jsx";
@@ -40,7 +39,7 @@ function Navbar() {
         window.localStorage.removeItem("userUID");
       })
       .catch((error) => {
-        // An error happened.
+        console.log(error);
       });
   };
   useEffect(() => {
@@ -81,10 +80,10 @@ function Navbar() {
       </NavLink>
       <div className="flex items-center gap-6 ">
         {adminUID || userUID ? <NavLinkContainer tabName="home" /> : null}
-        {adminUID && <NavLinkContainer tabName="adminPanel" />}
+        {adminUID && <NavLinkContainer tabName="permission" />}
         {adminUID || userUID ? (
           <Button
-            className="hover:text-primary-color hover:font-bold transition-all ease-in-out"
+            className="transition-all ease-in-out hover:font-bold hover:text-primary-color"
             onClick={handleSignOut}>
             SignOut
           </Button>

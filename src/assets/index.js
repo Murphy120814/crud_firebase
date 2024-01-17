@@ -6,3 +6,5 @@ export { default as trashPng } from "./delete.png";
 export { default as viewPng } from "./view.png";
 export { default as searchPng } from "./search.png";
 export { default as noViewPng } from "./no_view.png";
+export { default as emptyPng } from "./empty.png";
+export { default as errorHandlePng} from "./errorHandle.png";
