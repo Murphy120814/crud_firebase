@@ -14,7 +14,7 @@ function FormikDatePicker(props) {
       </label>
       <Field name={name}>
         {({ form, field }) => {
-          const { setFieldValue } = form; //setField value allows you to programmatically set the field value
+          const { setFieldValue } = form; // setField value allows you to programmatically set the field value
 
           const { value } = field;
           return (

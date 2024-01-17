@@ -1,16 +1,18 @@
 import React from "react";
 import { Button } from "../../common";
+import { Link } from "react-router-dom";
 function UserListTabActionButtons({ user }) {
+  console.log(user);
   return (
-    <div className=" w-full lg:w-3/12 flex items-center gap-2 lg:gap-4">
-      <Button className="p-2 bg-primary-color w-16 hover:font-bold transition-all ease-in-out rounded-xl">
-        Edit
+    <div className=" flex w-full items-center gap-2 lg:w-3/12 lg:gap-4">
+      <Button className="w-16 rounded-xl bg-primary-color p-2 transition-all ease-in-out hover:font-bold">
+        <Link to={`/editUser/${user.id}`}>Edit</Link>
       </Button>
-      <Button className="p-2 bg-primary-color w-16 hover:font-bold transition-all ease-in-out rounded-xl">
+      <Button className="w-16 rounded-xl bg-primary-color p-2 transition-all ease-in-out hover:font-bold">
         Delete
       </Button>
-      <Button className="p-2 bg-primary-color w-16 hover:font-bold transition-all ease-in-out rounded-xl">
-        View
+      <Button className="w-16 rounded-xl bg-primary-color p-2 transition-all ease-in-out hover:font-bold">
+        <Link to={`/viewUser/${user.id}`}> View</Link>
       </Button>
     </div>
   );

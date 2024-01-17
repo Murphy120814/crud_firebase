@@ -75,7 +75,7 @@ function Navbar() {
   }, [darkMode]);
   return (
     <div className="flex w-full items-center  justify-between px-4 py-2">
-      <NavLink to="/">
+      <NavLink to="/home">
         {" "}
         <Image src={logoPng} className="h-[50px] w-[50px]" />
       </NavLink>

@@ -9,7 +9,7 @@ import { viewPng, noViewPng } from "../../assets";
 import { Button, Image } from "../../common";
 import { options } from "../../../constants";
 import { useNavigate } from "react-router-dom";
-function UserFormikForm() {
+function UserFormikForm({ savedValues }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const validationSchema = Yup.object({
@@ -108,9 +108,9 @@ function UserFormikForm() {
     navigate("/home");
   };
   return (
-    <div className="flex  h-full min-h-[80vh] w-full items-start justify-center py-12">
+    <div className="flex  min-h-[80vh] w-full items-start justify-center py-12">
       <Formik
-        initialValues={initialValues}
+        initialValues={savedValues || initialValues}
         onSubmit={onSubmit}
         validationSchema={validationSchema}>
         {(formik) => (
@@ -144,7 +144,7 @@ function UserFormikForm() {
 
               <FormikControl
                 control="input"
-                label="Password"
+                label={savedValues ? "Update Password" : "New Password"}
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="********"
@@ -189,8 +189,8 @@ function UserFormikForm() {
             <Button
               disabled={!(formik.isValid && formik.dirty)}
               type="submit"
-              className="w-full rounded-lg bg-blue-700 px-5 py-2.5 mt-2 text-center text-sm font-medium text-white hover:bg-blue-800  disabled:bg-black disabled:opacity-20 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto">
-              Submit
+              className="mt-2 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800  disabled:bg-black disabled:opacity-20 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto">
+              {savedValues ? "Update User" : "Submit"}
             </Button>
           </Form>
         )}

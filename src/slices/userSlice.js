@@ -5,7 +5,7 @@ import { formatTimestamp } from "../../constants";
 export const addUsersFromFirebaseToStore = createAsyncThunk(
   "user/addUsersFromFirebaseToStore",
   async () => {
-    let usersList = [];
+    const usersList = [];
     const querySnapshot = await getDocs(collection(db, "users"));
     querySnapshot.forEach((doc) => {
       usersList.push({
@@ -23,7 +23,7 @@ const userSlice = createSlice({
   initialState: {
     userUID: null,
     userList: [],
-    status: "idle", //idle, loading, succeeded, failed
+    status: "idle", // idle, loading, succeeded, failed
     error: "",
   },
   reducers: {
@@ -57,5 +57,6 @@ export const getUserUID = (state) => state.user.userUID;
 export const getStatus = (state) => state.user.status;
 export const getUserList = (state) => state.user.userList;
 export const getError = (state) => state.user.error;
-export const { updateUserUID, removeUserUID , clearUserList } = userSlice.actions;
+export const { updateUserUID, removeUserUID, clearUserList } =
+  userSlice.actions;
 export default userSlice.reducer;

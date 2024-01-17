@@ -59,12 +59,7 @@ export function formatTimestamp(timestamp) {
     minute: "2-digit",
   };
   return (
-    date.toLocaleDateString("en-US", options) +
-    ", " +
-    date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    })
+    date.toLocaleDateString("en-US", options)
   );
 }
+

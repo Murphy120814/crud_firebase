@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
 import { Button } from "../../common";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getAdminUID } from "../../slices/adminSlice";
 import { Link } from "react-router-dom";
-import { addUsersFromFirebaseToStore } from "../../slices/userSlice";
-import { useDispatch } from "react-redux";
-import { getUserList } from "../../slices/userSlice";
-import { getStatus } from "../../slices/userSlice";
-import { getError } from "../../slices/userSlice";
+import {
+  addUsersFromFirebaseToStore,
+  getUserList,
+  getStatus,
+  getError,
+} from "../../slices/userSlice";
+
 import UserListTab from "./UserListTab";
 import UserListTabActionButtons from "./UserListTabActionButtons";
 function Home() {
@@ -31,7 +33,7 @@ function Home() {
     renderedUserList = userList.map((user) => {
       return (
         <div
-          className="w-full flex lg:flex-row flex-col justify-between shadow-xl p-3 rounded-xl items-center mb-2 dark:shadow-slate-50 dark:shadow-sm"
+          className="mb-2 flex w-full flex-col items-center justify-between rounded-xl p-3 shadow-xl dark:shadow-sm dark:shadow-slate-50 lg:flex-row"
           key={user.id}>
           <UserListTab user={user} />
           <UserListTabActionButtons user={user} />
@@ -40,10 +42,10 @@ function Home() {
     });
   }
   return (
-    <div className="min-h-[80vh] flex flex-col items-center gap-4 p-4">
+    <div className="flex min-h-[80vh] flex-col items-center gap-4 p-4">
       {adminUID && (
         <Link to="/addUser" className="self-end ">
-          <Button className="p-2  bg-primary-color hover:font-bold transition-all ease-in-out rounded-xl">
+          <Button className="rounded-xl  bg-primary-color p-2 transition-all ease-in-out hover:font-bold">
             Add User
           </Button>
         </Link>
