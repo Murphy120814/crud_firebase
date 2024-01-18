@@ -31,6 +31,15 @@ function Permission() {
             console.log(error);
           }
         };
+        const handleCanDelete = async (value) => {
+          try {
+            await updateDoc(userRef, {
+              canDelete: value,
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        };
 
         return (
           <div
@@ -39,12 +48,27 @@ function Permission() {
             <UserListTab user={user} />
             {
               <div>
-                <div className="flex gap-10">
+                <div className="flex gap-10"> 
                   <span className="flex items-center gap-2 font-bold">
-                    CanView: <SliderSwitch user={ user.canView} handleUpdate={handleCanView} />
+                    CanView:{" "}
+                    <SliderSwitch
+                      user={user.canView}
+                      handleUpdate={handleCanView}
+                    />
                   </span>
                   <span className="flex items-center gap-2 font-bold">
-                    CanEdit: <SliderSwitch user={user.canUpdate }  handleUpdate={handleCanUpdate} />
+                    CanEdit:{" "}
+                    <SliderSwitch
+                      user={user.canUpdate}
+                      handleUpdate={handleCanUpdate}
+                    />
+                  </span>
+                  <span className="flex items-center gap-2 font-bold">
+                    CanDelete:{" "}
+                    <SliderSwitch
+                      user={user.canDelete}
+                      handleUpdate={handleCanDelete}
+                    />
                   </span>
                 </div>
               </div>

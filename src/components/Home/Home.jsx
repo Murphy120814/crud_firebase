@@ -4,38 +4,51 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAdminUID } from "../../slices/adminSlice";
 import { Link } from "react-router-dom";
 import { emptyPng } from "../../assets";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../../../firebase";
 import Shimmer from "../Utils/Shimmer";
-import {
-  addUsersFromFirebaseToStore,
-  getUserList,
-  getStatus,
-  getError,
-} from "../../slices/userSlice";
+import { getUserList, addUserList } from "../../slices/userSlice";
+import { formatTimestamp } from "../../../constants";
 
 import UserListTab from "./UserListTab";
 import UserListTabActionButtons from "./UserListTabActionButtons";
 function Home() {
   const dispatch = useDispatch();
   const adminUID = useSelector(getAdminUID);
-  const status = useSelector(getStatus);
-  const error = useSelector(getError);
   const userList = useSelector(getUserList);
   let renderedUserList;
   useEffect(() => {
-    dispatch(addUsersFromFirebaseToStore());
+    const unsub = onSnapshot(
+      collection(db, "users"),
+      (snapshot) => {
+        const list = [];
+        snapshot.docs.forEach((doc) => {
+          list.push({
+            id: doc.id,
+            ...doc.data(),
+            rawCreationAt: doc.data().createdAt,
+            createdAt: formatTimestamp(doc.data().createdAt),
+            dateOfBirth: formatTimestamp(doc.data().dateOfBirth),
+            editedAt:
+              doc.data().editedAt && formatTimestamp(doc.data().editedAt),
+          });
+        });
+
+        dispatch(addUserList(list));
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    return () => {
+      unsub();
+    };
   }, []);
 
-  if (status === "loading") {
-    return (
-      <div className="flex flex-col gap-4 p-8">
-        <Shimmer />
-      </div>
-    );
-  }
-  if (status === "failed") {
-    return <div>{error}</div>;
-  }
-  if (status === "succeeded") {
+  if (userList.length == 0) {
+    return <Shimmer />;
+  } else {
     renderedUserList = userList.map((user) => {
       return (
         <div
@@ -47,6 +60,7 @@ function Home() {
       );
     });
   }
+
   return (
     <div className="flex min-h-[80vh] flex-col items-center gap-4 p-4">
       {adminUID && (

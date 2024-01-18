@@ -5,12 +5,13 @@ import FormikControl from "./formik/FormikControl";
 import { viewPng, noViewPng } from "../assets";
 import { Image } from "../common";
 import { auth } from "../../firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { updateAdminUID } from "../slices/adminSlice";
 import { updateUserUID } from "../slices/userSlice";
 import { REACT_APP_ADMIN_UID } from "../../constants";
+
 function AuthenticationForm() {
   const dispatch = useDispatch();
 
@@ -93,6 +94,11 @@ function AuthenticationForm() {
               placeholder="********"
             />
           </div>
+
+          <span className="font-semibold text-blue-900">
+            {" "}
+            <Link to="/resetPassword">Forgot Password?</Link>
+          </span>
 
           <button
             disabled={!(formik.isValid && formik.dirty)}

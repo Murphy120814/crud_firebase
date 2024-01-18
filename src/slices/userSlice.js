@@ -1,35 +1,29 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
-import { formatTimestamp } from "../../constants";
-export const addUsersFromFirebaseToStore = createAsyncThunk(
-  "user/addUsersFromFirebaseToStore",
-  async () => {
-    const usersList = [];
+import { createSlice } from "@reduxjs/toolkit";
 
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-      usersList.push({
-        id: doc.id,
-        ...doc.data(),
-        rawCreationAt: doc.data().createdAt,
-        createdAt: formatTimestamp(doc.data().createdAt),
-        dateOfBirth: formatTimestamp(doc.data().dateOfBirth),
-        editedAt: doc.data().editedAt && formatTimestamp(doc.data().editedAt),
-      });
-    });
-    return usersList;
-  }
-);
+// export const addUsersFromFirebaseToStore = createAsyncThunk(
+//   "user/addUsersFromFirebaseToStore",
+//   async () => {
+//     const usersList = [];
+
+//     const querySnapshot = await getDocs(collection(db, "users"));
+//     querySnapshot.forEach((doc) => {
+//       usersList.push({
+//         id: doc.id,
+//         ...doc.data(),
+//         rawCreationAt: doc.data().createdAt,
+//         createdAt: formatTimestamp(doc.data().createdAt),
+//         dateOfBirth: formatTimestamp(doc.data().dateOfBirth),
+//         editedAt: doc.data().editedAt && formatTimestamp(doc.data().editedAt),
+//       });
+//     });
+//     return usersList;
+//   }
+// );
 const userSlice = createSlice({
   name: "user",
   initialState: {
     userUID: null,
     userList: [],
-    userAuthInfo: [],
-    createdAt: null,
-    status: "idle", // idle, loading, succeeded, failed
-    error: "",
   },
   reducers: {
     updateUserUID: (state, action) => {
@@ -39,6 +33,10 @@ const userSlice = createSlice({
     addUserAuthInfo: (state, action) => {
       state.userAuthInfo.push(action.payload);
     },
+
+    addUserList: (state, action) => {
+      state.userList = action.payload;
+    },
     clearUserList: (state, action) => {
       state.userList.length = 0;
     },
@@ -46,26 +44,17 @@ const userSlice = createSlice({
       state.userUID = null;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(addUsersFromFirebaseToStore.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(addUsersFromFirebaseToStore.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.userList = action.payload;
-      })
-      .addCase(addUsersFromFirebaseToStore.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
-      });
-  },
 });
 
 export const getUserUID = (state) => state.user.userUID;
-export const getStatus = (state) => state.user.status;
+
 export const getUserList = (state) => state.user.userList;
-export const getError = (state) => state.user.error;
-export const { updateUserUID, removeUserUID, clearUserList, addUserAuthInfo } =
-  userSlice.actions;
+
+export const {
+  updateUserUID,
+  removeUserUID,
+  clearUserList,
+  addUserAuthInfo,
+  addUserList,
+} = userSlice.actions;
 export default userSlice.reducer;

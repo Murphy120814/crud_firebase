@@ -12,6 +12,7 @@ import {
   Permission,
   ViewContainer,
   EditUser,
+  ForgotPassword,
 } from "./components";
 import store from "./store/store";
 export const appRouter = createBrowserRouter([
@@ -42,6 +43,10 @@ export const appRouter = createBrowserRouter([
       {
         path: "/editUser/:uid",
         element: <EditUser />,
+      },
+      {
+        path: "/resetPassword",
+        element: <ForgotPassword />,
       },
       {
         path: "/*",
