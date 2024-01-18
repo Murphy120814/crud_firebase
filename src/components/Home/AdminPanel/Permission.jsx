@@ -47,26 +47,26 @@ function Permission() {
             key={user.id}>
             <UserListTab user={user} />
             {
-              <div>
-                <div className="flex gap-10"> 
+              <div key={user.id}>
+                <div className="flex gap-10">
                   <span className="flex items-center gap-2 font-bold">
                     CanView:{" "}
                     <SliderSwitch
-                      user={user.canView}
+                      hasAccess={user.canView}
                       handleUpdate={handleCanView}
                     />
                   </span>
                   <span className="flex items-center gap-2 font-bold">
                     CanEdit:{" "}
                     <SliderSwitch
-                      user={user.canUpdate}
+                      hasAccess={user.canUpdate}
                       handleUpdate={handleCanUpdate}
                     />
                   </span>
                   <span className="flex items-center gap-2 font-bold">
                     CanDelete:{" "}
                     <SliderSwitch
-                      user={user.canDelete}
+                      hasAccess={user.canDelete}
                       handleUpdate={handleCanDelete}
                     />
                   </span>
