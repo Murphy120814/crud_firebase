@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase";
+import { Link } from "react-router-dom";
 import { USER_PASSWORD_RESET_SUCCESSFULL } from "../../constants";
 import { useDispatch } from "react-redux";
 import { toggleModal, updateErrorAndSuccessMessage } from "../slices/userSlice";
@@ -60,6 +61,9 @@ function ForgotPassword() {
           Reset Password
         </button>
       </div>
+      <Link to="/" className="mt-6">
+        <span className="font-bold text-primary-color">Go Back</span>
+      </Link>
     </div>
   );
 }
