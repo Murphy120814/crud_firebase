@@ -43,7 +43,7 @@ function Permission() {
                   <span className="flex items-center gap-2 font-bold">
                     CanView:{" "}
                     <SliderSwitch
-                      hasAccess={user.canView}
+                      hasAccess={user?.canView}
                       handleUpdate={handleCanView}
                       id={user.id + "1"}
                     />
@@ -51,7 +51,7 @@ function Permission() {
                   <span className="flex items-center gap-2 font-bold">
                     CanEdit:{" "}
                     <SliderSwitch
-                      hasAccess={user.canUpdate}
+                      hasAccess={user?.canUpdate}
                       handleUpdate={handleCanUpdate}
                       id={user.id + "2"}
                     />

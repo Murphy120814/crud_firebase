@@ -50,7 +50,7 @@ function UserListTabActionButtons({ user }) {
             !(
               user.id == window.localStorage.getItem("userUID") ||
               window.localStorage.getItem("adminUID") ||
-              currentUser.canUpdate
+              currentUser?.canUpdate
             )
           }>
           Edit
@@ -72,7 +72,7 @@ function UserListTabActionButtons({ user }) {
             !(
               user.id == window.localStorage.getItem("userUID") ||
               window.localStorage.getItem("adminUID") ||
-              currentUser.canView
+              currentUser?.canView
             )
           }>
           View
