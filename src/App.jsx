@@ -13,6 +13,7 @@ import {
   ViewContainer,
   EditUser,
   ForgotPassword,
+  Notification,
 } from "./components";
 import store from "./store/store";
 export const appRouter = createBrowserRouter([
@@ -64,15 +65,18 @@ function App() {
     }
   }, []);
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-between bg-white text-black dark:bg-black dark:text-white">
-      <Provider store={store}>
-        <Navbar />
-        <div className="mt-4 min-h-[80vh] w-full">
-          {" "}
-          <Outlet />
-        </div>
-        <Footer />
-      </Provider>
+    <div className="relative">
+      <div className=" flex min-h-screen w-full flex-col items-center justify-between bg-white text-black dark:bg-black dark:text-white">
+        <Provider store={store}>
+          <Navbar />
+          <div className="mt-4 min-h-[80vh] w-full">
+            {" "}
+            <Outlet />
+          </div>
+          <Footer />
+          <Notification />
+        </Provider>
+      </div>
     </div>
   );
 }

@@ -1,32 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "./formik/FormikControl";
 import { viewPng, noViewPng } from "../assets";
+import { USER_SUCCESS_LOGIN, REACT_APP_ADMIN_UID } from "../../constants";
 import { Image } from "../common";
 import { auth } from "../../firebase";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { updateAdminUID } from "../slices/adminSlice";
-import { updateUserUID } from "../slices/userSlice";
-import { REACT_APP_ADMIN_UID } from "../../constants";
+import {
+  updateUserUID,
+  toggleModal,
+  updateErrorAndSuccessMessage,
+} from "../slices/userSlice";
 
 function AuthenticationForm() {
   const dispatch = useDispatch();
 
-  const [showErrorMessage, setShowErrorMessage] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const initialValues = {
     email: "",
     password: "",
   };
-  useEffect(() => {
-    setTimeout(() => {
-      setShowErrorMessage("");
-    }, [1000]);
-  }, [showErrorMessage]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setShowErrorMessage("");
+  //   }, [3000]);
+  // }, [showErrorMessage]);
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
@@ -52,12 +55,26 @@ function AuthenticationForm() {
         }
 
         navigate("/home");
+        dispatch(toggleModal(true));
+        dispatch(
+          updateErrorAndSuccessMessage({
+            tag: "success",
+            message: USER_SUCCESS_LOGIN,
+          })
+        );
       })
       .catch((error) => {
-        const errorCode = error.code;
+        // const errorCode = error.code;
         const errorMessage = error.message;
-        setShowErrorMessage(errorCode);
-        console.log({ errorCode, errorMessage });
+        dispatch(toggleModal(true));
+        dispatch(
+          updateErrorAndSuccessMessage({
+            tag: "error",
+            message: errorMessage,
+          })
+        );
+        // setShowErrorMessage(errorCode);
+        // console.log({ errorCode, errorMessage });
       });
   };
 
@@ -106,10 +123,10 @@ function AuthenticationForm() {
             className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800  disabled:bg-black disabled:opacity-20 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto">
             Log In
           </button>
-          <span className="font-semibold text-red-600">
+          {/* <span className="font-semibold text-red-600">
             {" "}
             {showErrorMessage}
-          </span>
+          </span> */}
         </Form>
       )}
     </Formik>

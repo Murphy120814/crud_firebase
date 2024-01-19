@@ -8,16 +8,22 @@ import {
   updateEmail,
   updatePassword,
 } from "firebase/auth";
+import { USER_SUCCESS_ADD, options } from "../../../constants";
 import * as Yup from "yup";
 import { viewPng, noViewPng } from "../../assets";
 import { Button, Image } from "../../common";
 import { getAdminUID } from "../../slices/adminSlice";
-import { getUserUID } from "../../slices/userSlice";
-import { useSelector } from "react-redux";
-import { options } from "../../../constants";
+import {
+  getUserUID,
+  toggleModal,
+  updateErrorAndSuccessMessage,
+} from "../../slices/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+
 import { useNavigate, useParams } from "react-router-dom";
 
 function UserFormikForm({ savedValues, uid }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { uid: userId } = useParams();
   const adminUID = useSelector(getAdminUID);
@@ -74,8 +80,22 @@ function UserFormikForm({ savedValues, uid }) {
         editedAt: savedValues ? serverTimestamp() : editedAt,
         createdAt: savedValues ? savedValues.rawCreationAt : serverTimestamp(),
       });
+      dispatch(toggleModal(true));
+      dispatch(
+        updateErrorAndSuccessMessage({
+          tag: "success",
+          message: USER_SUCCESS_ADD,
+        })
+      );
     } catch (error) {
       console.log(error);
+      dispatch(toggleModal(true));
+      dispatch(
+        updateErrorAndSuccessMessage({
+          tag: "error",
+          message: error,
+        })
+      );
     }
   };
 

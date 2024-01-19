@@ -8,3 +8,4 @@ export { default as UserFormikForm } from "./Home/UserFormikForm.jsx";
 export { default as ViewContainer } from "./Home/ViewUser/ViewContainer.jsx";
 export { default as EditUser } from "./Home/EditUser/EditUser.jsx";
 export { default as ForgotPassword } from "./ForgotPassword.jsx";
+export {default as Notification } from "./ReactPortal/Notification.jsx"

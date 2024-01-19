@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-const SliderSwitch = ({ hasAccess, handleUpdate }) => {
+const SliderSwitch = ({ id, hasAccess, handleUpdate }) => {
   const [accessState, setAccessState] = useState(hasAccess);
-
-  // Synchronize internal state with the prop
-  useEffect(() => {
-    setAccessState(hasAccess);
-  }, [hasAccess]);
 
   return (
     <div className="flex cursor-pointer items-center gap-2">
       <input
         type="checkbox"
-        id="toggleButton"
+        id={"toggleButton" + id}
         checked={accessState}
-        // className="  hidden"
+        className="hidden"
         onChange={() => {
           const newAccessState = !accessState;
           setAccessState(newAccessState);
@@ -22,7 +17,7 @@ const SliderSwitch = ({ hasAccess, handleUpdate }) => {
         }}
       />
       <label
-        htmlFor="toggleButton"
+        htmlFor={"toggleButton" + id}
         className={`h-6 w-6 cursor-pointer rounded-full ${accessState ? "bg-green-600" : "bg-red-700"}`}
       />
     </div>

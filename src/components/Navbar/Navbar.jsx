@@ -2,9 +2,16 @@ import React, { useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectDarkMode } from "../../slices/themeSlice.js";
-
+import { USER_SUCCESS_LOGOUT } from "../../../constants.js";
 import { Button, Image } from "../../common";
-
+import {
+  toggleModal,
+  updateErrorAndSuccessMessage,
+  updateUserUID,
+  getUserUID,
+  removeUserUID,
+  clearUserList,
+} from "../../slices/userSlice.js";
 import NavLinkContainer from "./NavLinkContainer";
 import { logoPng } from "../../assets/index.js";
 import ThemeToggle from "./ThemeToggle.jsx";
@@ -15,12 +22,7 @@ import {
   getAdminUID,
   removeAdminUID,
 } from "../../slices/adminSlice.js";
-import {
-  updateUserUID,
-  getUserUID,
-  removeUserUID,
-  clearUserList,
-} from "../../slices/userSlice.js";
+
 function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,9 +39,23 @@ function Navbar() {
         dispatch(clearUserList());
         window.localStorage.removeItem("adminUID");
         window.localStorage.removeItem("userUID");
+        dispatch(toggleModal(true));
+        dispatch(
+          updateErrorAndSuccessMessage({
+            tag: "success",
+            message: USER_SUCCESS_LOGOUT,
+          })
+        );
       })
       .catch((error) => {
         console.log(error);
+        dispatch(toggleModal(true));
+        dispatch(
+          updateErrorAndSuccessMessage({
+            tag: "error",
+            message: error,
+          })
+        );
       });
   };
   useEffect(() => {
@@ -85,7 +101,7 @@ function Navbar() {
           <Button
             className="transition-all ease-in-out hover:font-bold hover:text-primary-color"
             onClick={handleSignOut}>
-            SignOut
+            LogOut
           </Button>
         ) : null}
         <ThemeToggle />

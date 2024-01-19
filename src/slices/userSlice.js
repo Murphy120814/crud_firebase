@@ -24,6 +24,9 @@ const userSlice = createSlice({
   initialState: {
     userUID: null,
     userList: [],
+    successMessage: "",
+    errorMessage: "",
+    modalIsActive: false,
   },
   reducers: {
     updateUserUID: (state, action) => {
@@ -43,18 +46,34 @@ const userSlice = createSlice({
     removeUserUID: (state) => {
       state.userUID = null;
     },
+
+    updateErrorAndSuccessMessage: (state, action) => {
+      if (action.payload.tag == "error") {
+        state.errorMessage = action.payload.message;
+      } else if (action.payload.tag == "success") {
+        state.successMessage = action.payload.message;
+      }
+    },
+
+    toggleModal: (state, action) => {
+      state.modalIsActive = action.payload;
+    },
   },
 });
 
 export const getUserUID = (state) => state.user.userUID;
-
+export const getErrorMessage = (state) => state.user.errorMessage;
+export const getSuccessMessage = (state) => state.user.successMessage;
 export const getUserList = (state) => state.user.userList;
+export const getModalIsActive = (state) => state.user.modalIsActive;
 
 export const {
   updateUserUID,
   removeUserUID,
   clearUserList,
   addUserAuthInfo,
+  updateErrorAndSuccessMessage,
+  toggleModal,
   addUserList,
 } = userSlice.actions;
 export default userSlice.reducer;

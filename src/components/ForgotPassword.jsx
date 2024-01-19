@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase";
-
+import { USER_PASSWORD_RESET_SUCCESSFULL } from "../../constants";
+import { useDispatch } from "react-redux";
+import { toggleModal, updateErrorAndSuccessMessage } from "../slices/userSlice";
 function ForgotPassword() {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [disabled, setDisabled] = useState(false);
   const handlePasswordReset = (email) => {
@@ -10,10 +13,23 @@ function ForgotPassword() {
       .then(() => {
         // Password reset email sent!
         // ..
+        dispatch(toggleModal(true));
+        dispatch(
+          updateErrorAndSuccessMessage({
+            tag: "success",
+            message: USER_PASSWORD_RESET_SUCCESSFULL,
+          })
+        );
       })
       .catch((error) => {
         const errorCode = error.code;
-        console.log(errorCode);
+        dispatch(toggleModal(true));
+        dispatch(
+          updateErrorAndSuccessMessage({
+            tag: "error",
+            message: errorCode,
+          })
+        );
         // ..
       });
   };

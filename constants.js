@@ -58,8 +58,13 @@ export function formatTimestamp(timestamp) {
     hour: "2-digit",
     minute: "2-digit",
   };
-  return (
-    date.toLocaleDateString("en-US", options)
-  );
+  return date.toLocaleDateString("en-US", options);
 }
 
+export const USER_SUCCESS_LOGIN = "User has logged in Successfully!!";
+export const USER_SUCCESS_DELETE = "User has been successfully deleted!!";
+// export const USER_SUCCESS_UPDATE = "User has been successfully updated!!";
+export const USER_SUCCESS_ADD = "User has been successfully added / updated!!";
+export const USER_SUCCESS_LOGOUT = "User has been successfully logged out!!";
+export const USER_PASSWORD_RESET_SUCCESSFULL =
+  "Password reset email has been successfully sent";
