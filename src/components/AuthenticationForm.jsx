@@ -123,7 +123,7 @@ function AuthenticationForm() {
             className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800  disabled:bg-black disabled:opacity-20 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto">
             Log In
           </button>
-          <p className="font-semibold text-black dark:text-white">
+          <p className="font-semibold text-black dark:text-white col-span-2">
            For admin usage use Email: <span className="text-red-500">prathm@frontendmeta.dev</span> and password as <span className="text-red-500">Admin@12</span> 
           </p>
         </Form>
