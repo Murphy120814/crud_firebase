@@ -4,7 +4,7 @@ export function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-export const REACT_APP_ADMIN_UID = "iTDMzPmGKrXI8m83jPwUJJllchh2";
+export const REACT_APP_ADMIN_UID = "5Q0Um7oOCkQxfQiCXW7Nhl704Hj1";
 export const REACT_APP_FIREBASE_KEY = "AIzaSyB7yrAeCTdS5EzG8atxeRUQUbq9fA_EOw0";
 export const options = [
   { key: "Select Option", value: "" },
